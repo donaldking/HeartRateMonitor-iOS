@@ -195,8 +195,17 @@
     }
     else if ([characteristic.UUID isEqual:[CBUUID UUIDWithString:BODY_SENSOR_LOCATION_CHARACHTERISTIC_UUID]])
     {
-        /* Get body sensor reading */
-        NSLog(@"Bytes: %@\nValue in NSData: %@",[value bytes],value);
+        /* Get body sensor location reading */
+        const uint8_t *v = [value bytes];
+        
+        if ((v[0] & 0x01) != 0)
+        {
+             NSLog(@"Body location reading: %hhu",v[0]);
+        }
+        else
+        {
+             NSLog(@"Body location reading: %hhu",v[1]);
+        }
     }
 }
 
