@@ -1,0 +1,17 @@
+//
+//  PrefixHeader.pch
+//  Heart
+//
+//  Created by Donald King on 15/07/2015.
+//  Copyright (c) 2015 Tusk Solutions UK. All rights reserved.
+//
+
+#ifndef Heart_PrefixHeader_pch
+#define Heart_PrefixHeader_pch
+
+// Include any system framework and library headers here that should be included in all compilation units.
+// You will also need to set the Prefix Header build setting of one or more of your targets to reference this file.
+
+#import <CoreBluetooth/CoreBluetooth.h>
+
+#endif
