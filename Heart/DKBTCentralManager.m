@@ -8,8 +8,6 @@
 
 #import "DKBTCentralManager.h"
 
-static DKBTCentralManager *instance;
-
 /* Heart Rate Monitor Service */
 #define HEART_RATE_SERVICE_UUID @"180D"
 
@@ -37,12 +35,17 @@ static DKBTCentralManager *instance;
 
 + (instancetype)sharedManager
 {
-    if (!instance)
-    {
+    static dispatch_once_t once;
+    static DKBTCentralManager *instance = nil;
+    
+    dispatch_once(&once, ^{
+        
         instance = [DKBTCentralManager new];
         instance.centralManager = [[CBCentralManager alloc] initWithDelegate:instance queue:nil];
         instance.peripherals = [NSMutableArray new];
-    }
+    
+    });
+    
     return instance;
 }
 
