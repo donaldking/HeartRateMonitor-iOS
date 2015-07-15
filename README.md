@@ -6,6 +6,6 @@ This is an app that demonstrates how to connect to a Bluetooth LE device. In thi
 Simply launch this App and tap on connect. The app will search for Heart Rate Monitors close by and initiate a connection to it.
 When connected, the App will request to be notified of Heart Rate Measurement changes (Characteristics) from the device and also read the value of Body Sensor Location (Characteristics).
 
-Any questions / support, contact me: donaldking247@gmail.com
+Any questions / support, contact me via Twitter: @donaldking247
 
 Enjoy
