@@ -24,7 +24,7 @@ typedef NS_ENUM(NSUInteger, CentralConnectionStatus)
 @property (nonatomic, readonly) CBPeripheral *currentPeripheral;
 @property (nonatomic, readonly) CentralConnectionStatus status;
 @property (nonatomic, readonly) NSUInteger currentHeartRate;
-
+@property (nonatomic, readonly) NSString *sensorLocation;
 //------------------------------------------------------------------------------
 // MARK: - Methods
 //------------------------------------------------------------------------------

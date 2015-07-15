@@ -16,6 +16,7 @@ static NSString *kCentralManagerStatusKeyPath = @"status";
 
 @property (weak, nonatomic) IBOutlet UILabel *heartRateLabel;
 @property (weak, nonatomic) IBOutlet UILabel *statusLabel;
+@property (weak, nonatomic) IBOutlet UILabel *sensorLocationLabel;
 @property (weak, nonatomic) IBOutlet UIButton *connectDisconnectButton;
 
 @end
@@ -82,6 +83,7 @@ static NSString *kCentralManagerStatusKeyPath = @"status";
     }
     if([keyPath isEqualToString:kCurrentHeartRateKeyPath])
     {
+        self.sensorLocationLabel.text = [NSString stringWithFormat:@"Sensor location: %@",[DKBTCentralManager sharedManager].sensorLocation];
         self.heartRateLabel.text = [NSString stringWithFormat:@"%@ bpm",[[change valueForKey:@"new"] stringValue]];
     }
 }
@@ -99,6 +101,8 @@ static NSString *kCentralManagerStatusKeyPath = @"status";
     else if ([DKBTCentralManager sharedManager].status == Scanning || [DKBTCentralManager sharedManager].status == Connected)
     {
         [[DKBTCentralManager sharedManager] stopScanningForPeripherals];
+        
+        self.sensorLocationLabel.text = @"";
         self.heartRateLabel.text = @"0 bpm";
     }
 }

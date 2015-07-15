@@ -8,6 +8,18 @@
 
 #import "DKBTCentralManager.h"
 
+typedef NS_ENUM(NSInteger, BodySensorLocation)
+{
+    Unknown = -1,
+    Other,
+    Chest,
+    Wrist,
+    Finger,
+    Hand,
+    EarLobe,
+    Foot
+};
+
 /* Heart Rate Monitor Service */
 #define HEART_RATE_SERVICE_UUID @"180D"
 
@@ -15,12 +27,23 @@
 #define HEART_RATE_MEASUREMENT_CHARACHTERISTIC_UUID @"2A37"
 #define BODY_SENSOR_LOCATION_CHARACHTERISTIC_UUID @"2A38"
 
+static NSString *kBodySensorLocationUnknown = @"Unknown";
+static NSString *kBodySensorLocationOther   = @"Other";
+static NSString *kBodySensorLocationChest   = @"Chest";
+static NSString *kBodySensorLocationWrist   = @"Wrist";
+static NSString *kBodySensorLocationFinger  = @"Finger";
+static NSString *kBodySensorLocationHand    = @"Hand";
+static NSString *kBodySensorLocationEarLobe = @"Ear Lobe";
+static NSString *kBodySensorLocationFoot    = @"Foot";
+
 @interface DKBTCentralManager ()<CBCentralManagerDelegate,CBPeripheralDelegate>
 
 @property (nonatomic, readwrite) CBCentralManager *centralManager;
 @property (nonatomic, readwrite) CBPeripheral *currentPeripheral;
 @property (nonatomic, readwrite, getter=isCentralManagerReady) BOOL centralManagerReady;
 @property (nonatomic, readwrite) CentralConnectionStatus status;
+@property (nonatomic, readwrite) BodySensorLocation bodySensorLocation;
+@property (nonatomic, readwrite) NSString *sensorLocation;
 @property (nonatomic, readwrite) NSMutableArray *peripherals;
 @property (nonatomic, readwrite) NSUInteger currentHeartRate;
 
@@ -195,17 +218,7 @@
     }
     else if ([characteristic.UUID isEqual:[CBUUID UUIDWithString:BODY_SENSOR_LOCATION_CHARACHTERISTIC_UUID]])
     {
-        /* Get body sensor location reading */
-        const uint8_t *v = [value bytes];
-        
-        if ((v[0] & 0x01) != 0)
-        {
-             NSLog(@"Body location reading: %hhu",v[0]);
-        }
-        else
-        {
-             NSLog(@"Body location reading: %hhu",v[1]);
-        }
+        self.sensorLocation = [self sensorLocationFromValue:value];
     }
 }
 
@@ -233,6 +246,41 @@
         bmp = CFSwapInt16LittleToHost(*(uint16_t *)(&reportData[1]));
     }
     self.currentHeartRate = bmp;
+}
+
+- (NSString *)sensorLocationFromValue:(NSData *)value
+{
+    /* Get body sensor location reading */
+    const uint8_t *v = [value bytes];
+    
+    self.bodySensorLocation = (BodySensorLocation) v[0];
+    
+    switch (self.bodySensorLocation)
+    {
+        case Unknown:
+            return kBodySensorLocationUnknown;
+        
+        case Chest:
+            return kBodySensorLocationChest;
+        
+        case Wrist:
+            return kBodySensorLocationWrist;
+        
+        case Finger:
+            return kBodySensorLocationHand;
+        
+        case Hand:
+            return kBodySensorLocationHand;
+        
+        case EarLobe:
+            return kBodySensorLocationEarLobe;
+            
+        case Foot:
+            return kBodySensorLocationFoot;
+            
+        default:
+            return kBodySensorLocationUnknown;
+    }
 }
 
 @end
